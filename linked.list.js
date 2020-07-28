@@ -81,21 +81,20 @@ class DoublyLinkedList {
   reverse() {
     const reversedLinkedList = [];
     let current = this.head;
-
+    // O(n)
     while (current) {
       reversedLinkedList.push(current);
       current = current.next;
     }
 
-    console.log(reversedLinkedList);
-
+    // O(n)
     reversedLinkedList.reverse();
-    console.log(reversedLinkedList.length);
-    for (let i = 0; i < reversedLinkedList.length; i++) {
-      if (i === reversedLinkedList.length - 1) {
-        reversedLinkedList[i].next = null;
-      }
-      reversedLinkedList[i].next = reversedLinkedList[i + 1];
+    this.head.next = null;
+    this.head = reversedLinkedList[0];
+    this.tail = this.head;
+    // O(n)
+    for (let i = 1; i < reversedLinkedList.length; i++) {
+      this.append(reversedLinkedList[i].value);
     }
   }
 
@@ -115,6 +114,7 @@ const newDoublyLinkedList = new DoublyLinkedList(10);
 newDoublyLinkedList.append(21);
 newDoublyLinkedList.append(101);
 newDoublyLinkedList.insert(1, 99);
-//console.log(newDoublyLinkedList.print());
-newDoublyLinkedList.reverse();
-//console.log(newDoublyLinkedList.print());
+newDoublyLinkedList.insert(1, 55);
+console.log(newDoublyLinkedList.print());
+console.log(newDoublyLinkedList.reverse());
+console.log(newDoublyLinkedList.print());
