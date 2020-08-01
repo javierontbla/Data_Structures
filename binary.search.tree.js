@@ -64,45 +64,87 @@ class BinarySearchTree {
   }
 
   remove(value) {
-    if (!this.root) return;
+    if (!this.root) return false;
 
-    // locate node to be removed
-    let toBeRemoved = this.lookup(value);
-    let current = true;
+    let parent = null;
+    let current = this.root;
 
-    while (current) {
-      // node has no children, so we just deleted it
-      if (!toBeRemoved.left && !toBeRemoved.right) {
-        toBeRemoved.value = null;
-        current = null;
-        // this means, the value to be deleted has 2 children
-      } else if (toBeRemoved.left && toBeRemoved.right) {
-        // keep track of parent node
-        // find max of left sub-tree
-        current = toBeRemoved.left;
-        // get the max value of left sub-tree
-        while (current.right) {
-          current = current.right;
-        }
-        toBeRemoved.value = current.value;
-        // remove duplicate value
+    while (current && current.value !== value) {
+      // parent gets stored before current value changed again
+      // in this way, if we find current node down here
+      // the parent var doesn't get re-assigned
+      parent = current;
+      if (current.value > value) {
+        current = current.left;
+      } else if (current.value < value) {
+        current = current.right;
+      }
+    }
+
+    console.log("parent", parent);
+    console.log("current", current);
+    // if there is no node with that value
+    if (!current) return false;
+
+    // node with no children
+    if (!current.left && !current.right) {
+      // check if it's right or left side of parent
+      if (parent.left) {
+        parent.left = null;
+      } else if (parent.right) {
+        parent.right = null;
+      }
+    }
+
+    // two children
+    if (current.left && current.right) {
+      let tempParent = current;
+      let tempCurrent = current.right;
+
+      // find min in right sub-tree
+      while (tempCurrent.left) {
+        // when we find the min value
+        // the parent node store the last value before getting
+        // re-assigned again
+        tempParent = tempCurrent;
+        tempCurrent = tempCurrent.left;
+      }
+
+      // min value of right sub-tree gets assigned to node to be removed
+      current.value = tempCurrent.value;
+      tempParent.left = null;
+
+      if (tempCurrent.right) {
+        tempParent.left = tempCurrent.right;
+        return true;
+      } else if (!tempCurrent.right) {
+        tempParent.left = null;
+        return true;
+      }
+    }
+
+    // only right child
+    if (current.right) {
+      // right side of parent
+      if (parent.right.value === value) {
+        parent.right = current.right;
+        return true;
       } else {
-        if (toBeRemoved.right) {
-          // | one child scenario |
-          // assign the value of the right node to
-          // node to be removed
-          toBeRemoved.value = toBeRemoved.right.value;
-          // convert node that got displaced to null
-          toBeRemoved.right = null;
-          current = false;
-        } else if (toBeRemoved.left) {
-          // | one child scenario |
-          // assign the value of the left node to the
-          // node to be removed
-          toBeRemoved.value = toBeRemoved.left.value;
-          current = false;
-          // remove duplicate value
-        }
+        // left side of parent
+        parent.left = current.right;
+        return true;
+      }
+
+      // only left child
+    } else if (current.left) {
+      // right side of parent
+      if (parent.right.value === value) {
+        parent.right = current.left;
+        return true;
+      } else {
+        // left side of parent
+        parent.left = curren.left;
+        return true;
       }
     }
   }
@@ -115,13 +157,14 @@ class BinarySearchTree {
 const tree = new BinarySearchTree();
 
 tree.insert(9);
-tree.insert(7);
-tree.insert(19);
-tree.insert(11);
-tree.insert(10);
-tree.insert(12);
 tree.insert(21);
-tree.insert(23);
-tree.print();
-tree.remove(7);
+tree.insert(5);
+tree.insert(8);
+tree.insert(2);
+tree.insert(17);
+tree.insert(26);
+tree.insert(1);
+tree.insert(3);
+tree.insert(0);
+tree.remove(5);
 tree.print();
