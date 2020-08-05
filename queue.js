@@ -45,13 +45,16 @@ class Queue {
 
 const myQueue = new Queue();
 
-myQueue.enqueue("google");
-myQueue.print();
-myQueue.enqueue("facebook");
-myQueue.print();
-myQueue.enqueue("youtube");
-myQueue.print();
-// myQueue.dequeue();
+// myQueue.enqueue("google");
+// myQueue.print();
+// myQueue.enqueue("facebook");
+// myQueue.print();
+// myQueue.enqueue("youtube");
 // myQueue.print();
 // myQueue.dequeue();
 // myQueue.print();
+// myQueue.dequeue();
+// myQueue.print();
+
+const str = "a ";
+console.log(str.length);
